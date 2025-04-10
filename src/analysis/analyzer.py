@@ -1,7 +1,7 @@
 import pandas as pd
 import nltk
-#from nltk.corpus import stopwords
-#from collections import Counter
+from nltk.corpus import stopwords
+from collections import Counter
 
 #nltk.download('punkt')
 #nltk.download('stopwords')
@@ -13,7 +13,9 @@ def preprocess_text(text):
     return tokens
 
 def analyze_issues(df):
-    all_text = " ".join(df['content'].fillna('') + " " + df['comments'].apply(lambda comments: " ".join(comments)))
+    df['content'] = df['content'].fillna('').astype(str)
+    df['comments'] = df['comments'].fillna('').astype(str)
+    all_text = " ".join(df['content'] + " " + df['comments'])
     tokens = preprocess_text(all_text)
     common_issues = Counter(tokens).most_common(20)
     return common_issues
